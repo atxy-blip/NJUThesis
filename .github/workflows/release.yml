@@ -53,7 +53,7 @@ jobs:
           xetex njuvisual.dtx
           mv docs/* .
           mv build/unpacked/* .
-          zip -r njuthesis-user-$VERSION.zip *.def njuthesis.cls njuvisual.sty nju-*.pdf LICENSE CHANGELOG.md README.md
+          zip -r njuthesis-user-$VERSION.zip *.def njuthesis-sample* njuthesis.cls njuvisual.sty nju-*.pdf LICENSE CHANGELOG.md README.md
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
