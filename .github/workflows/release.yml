@@ -10,7 +10,7 @@ on:
 
 env:
   CTAN_URL: https://mirrors.rit.edu/CTAN
-  TL_PACKAGES: alphalph auxhook background bibtex bigfoot booktabs caption cm-unicode colortbl csquotes ctex dashundergaps diagbox enumitem everypage fancyhdr fancyvrb fandol footmisc hologo hycolor hypdoc hyperref l3build latexmk libertinus-fonts listings lm-math makecell makeindex natbib ninecolors njuvisual pict2e preview psnfss setspace siunitx symbol tabularray tex-gyre tex-gyre-math threeparttable translator underscore unicode-math url xintexpr xits xstring zhlineskip zref
+  TL_PACKAGES: alphalph auxhook background bibtex bigfoot booktabs caption cm-unicode colortbl csquotes ctex dashundergaps diagbox enumitem everypage fancyhdr fancyvrb fandol footmisc hologo hycolor hypdoc hyperref l3build latexmk libertinus-fonts listings lm-math makecell makeindex natbib ninecolors njuvisual pict2e preview psnfss setspace siunitx symbol tabularray tex-gyre tex-gyre-math threeparttable translator underscore unicode-math url xint xits xstring zhlineskip zref
 
 jobs:
   release:
