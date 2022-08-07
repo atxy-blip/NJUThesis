@@ -35,6 +35,21 @@ jobs:
           tlmgr install ${{ env.TL_PACKAGES }}
           tlmgr update --self --all --no-auto-install --repository=${{ env.CTAN_URL }}/systems/texlive/tlnet/
 
+      - name: Install fonts
+        run: |
+          mkdir fonts
+          wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SimplifiedChinese/SourceHanSerifSC-SemiBold.otf
+          wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SimplifiedChinese/SourceHanSerifSC-Bold.otf
+          wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SimplifiedChinese/SourceHanSerifSC-Heavy.otf
+          wget https://github.com/atxy-blip/njuthesis-doc-fonts/raw/main/iosevka-light.ttf
+          wget https://github.com/atxy-blip/njuthesis-doc-fonts/raw/main/iosevka-lightitalic.ttf
+          wget https://github.com/atxy-blip/njuthesis-doc-fonts/raw/main/iosevka-semibold.ttf
+          cp *.otf /usr/share/fonts/
+          cp *.ttf /usr/share/fonts/
+          chmod -x /usr/share/fonts/*.otf
+          chmod -x /usr/share/fonts/*.ttf
+          fc-cache -fv
+
       - name: Download njuvisual package
         run: |
           wget ${{ env.CTAN_URL }}/macros/latex/contrib/njuvisual/njuvisual.dtx

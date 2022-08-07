@@ -118,7 +118,7 @@ To produce the documentation run the original source files ending with
 %<*!(driver|install)>
 % ^^A 诚耀百廿，雄创一流
 % ^^A 南京大学一百二十周年华诞邀您共襄盛举！
-%<+!driver>\GetIdInfo $Id: njuthesis.dtx 1.0.0 2022-08-06 17:00:00
+%<+!driver>\GetIdInfo $Id: njuthesis.dtx 1.0.0 2022-08-06 13:00:00
 %<+!driver>  +0800 NJU LUG <git+nju-lug-email-3104-issue-@yaoge123.cn>$
 %<class>  {Thesis template for Nanjing University}
 %<class>\ProvidesExplClass{njuthesis}
@@ -134,7 +134,7 @@ To produce the documentation run the original source files ending with
 %<*driver>
 \ProvidesFile{njuthesis.dtx}
 \documentclass[fontset=fandol]{ctxdoc}
-\usepackage{listings,njuvisual,tabularray,unicode-math}
+\usepackage{listings,njuvisual,tabularray,unicode-math,zhlineskip}
 \usepackage[firstpage=true]{background}
 \backgroundsetup{
   contents={\njuemblem[white!85!gray]{22cm}{!}},
@@ -143,19 +143,7 @@ To produce the documentation run the original source files ending with
 \definecolor{olgreen}{HTML}{138a07}
 \newcommand\olbutton[1]{\textcolor{olgreen}{\bfseries #1}}
 \newcommand\tikzlogo{Ti\emph{k}Z}
-\makeatletter
-\newcommand\grd[1]{\textcolor{at@guard}{\sffamily\textlangle#1\textrangle}}
-\newcommand\sgrd[1]{
-  \begingroup\sffamily
-  \color{angle@guard}\textlangle\color{star@guard}*\ignorespaces
-  \color{c@guard}#1\color{angle@guard}\textrangle\endgroup
-}
-\newcommand\pgrd[1]{
-  \begingroup\sffamily\color{angle@guard}\textlangle\ignorespaces
-  \color{#1@guard}def-#1\color{angle@guard}\textrangle\endgroup
-}
-\makeatother
-\hypersetup{%
+\hypersetup{
   pdftitle  = {
     The njuthesis class -
     LaTeX thesis template for Nanjing University},
@@ -177,6 +165,20 @@ To produce the documentation run the original source files ending with
 \def\MacTeX{Mac\TeX}
 \def\biber{\hologo{biber}}
 \def\LaTeXe{\hologo{LaTeX2e}}
+\SetTextEnvironmentSinglespace{1.112}
+\SetMathEnvironmentSinglespace{1.112}
+\setsansfont{LexendDeca}
+\setmonofont{Iosevka}[
+  UprightFont = Iosevka Light,
+  ItalicFont  = Iosevka Light Italic,
+  BoldFont    = Iosevka Semibold
+]
+\setCJKmainfont{Source Han Serif SC}[
+  UprightFont = Source Han Serif SC SemiBold,
+  ItalicFont  = Source Han Serif SC Bold,
+  BoldFont    = Source Han Serif SC Heavy,
+  Language    = Chinese Simplified
+]
 \setmathfont{XITSMath-Regular}[
   BoldFont = XITSMath-Bold,
   Extension = .otf]
@@ -243,6 +245,14 @@ To produce the documentation run the original source files ending with
     \clist_map_inline:Nn \c__njudoc_module_color_clist
       { \__njudoc_compare_module:nnn {#1} ##1 }
   }
+\cs_new_protected:Npn \__njudoc_module_angle:Nn #1#2
+  {
+    \group_begin: \color { angle@guard }    \ttfamily \textlangle \group_end:
+    \group_begin: \sffamily #2 \group_end:
+    \group_begin: \color { angle@guard } #1 \ttfamily \textrangle \group_end:
+  }
+\cs_set_protected:Npn \__ctxdoc_module_angle:n #1
+  { \__njudoc_module_angle:Nn \c_empty_tl {#1} }
 \cs_new_protected:Npn \__njudoc_colored_module_angle:NN #1#2
   {
     \seq_clear:N #2
@@ -266,12 +276,13 @@ To produce the documentation run the original source files ending with
         \str_set:Nn  \l_tmpa_str { ( }
         \str_set:Nn  \l_tmpb_str { ) }
       }
-    \color { angle@guard } \textlangle
-    \color { star@guard  } #1
-    \color { angle@guard } \l_tmpa_str
-    \seq_use:Nn \l_tmpb_seq
-      { \color { angle@guard } \orbar }
-    \color { angle@guard } \l_tmpb_str \textrangle
+    \__njudoc_module_angle:Nn \l_tmpb_str
+      {
+        \color { star@guard  } #1
+        \color { angle@guard } \l_tmpa_str
+        \seq_use:Nn \l_tmpb_seq
+          { \color { angle@guard } \orbar }
+      }
   }
 \cs_new_protected_nopar:Npn \__njudoc_split_pm:n #1
   { \seq_set_split:Nnn \l_tmpa_seq { | } {#1} }
@@ -316,6 +327,12 @@ To produce the documentation run the original source files ending with
       \group_end:
     }
 \group_end:
+\NewDocumentCommand \grd { m }
+  { \__ctxdoc_module_angle:n { \color { njuviolet } #1 } }
+\NewDocumentCommand \sgrd { m }
+  { \__ctxdoc_module_angle:n { \color { star@guard } * \color{ c@guard } #1 } }
+\NewDocumentCommand \pgrd { m }
+  { \__ctxdoc_module_angle:n { \color { #1 @guard } def- #1 } }
 \ExplSyntaxOff
 \makeatother
 \begin{document}
@@ -334,7 +351,7 @@ To produce the documentation run the original source files ending with
 % \thanks{E-mail: \href{mailto:git+nju-lug-email-3104-issue-@yaoge123.cn}
 %   {git+nju-lug-email-3104-issue-@yaoge123.cn}}}
 %
-% \date{v1.0.0 \quad 2022-08-06}
+% \date{v1.0.0 \quad 2022-08-07}
 %
 % \changes{v0.1}{2021/09/04}{开始开发。}
 % \changes{v0.2}{2021/09/07}{初步搭建了可用的模板。}
@@ -835,7 +852,13 @@ To produce the documentation run the original source files ending with
 % \subsection{在线编译}
 % \label{subsec:onlinecompile}
 %
-% 相信您在接触了本地编译以后，很快就会意识到一些十分显然的事实，譬如 \TeX 编译器安装过程较为漫长\footnote{因此对于 Windows 推荐 \MiKTeX。}，占用空间过大\footnote{事实上，可以通过 |scheme-infraonly| 模式安装 \TL，随后利用 \pkg{tlmgr} 安装依赖宏包，这份宏包列表可以在 Git 仓库的 \file{.github/workflows/build.yml} 找到。}，而且在一部分处理器性能不佳的电脑上需要较长编译时间\footnote{出于文件 IO 速度的差异，同一个模板在 Linux 编译可以相对 Windows 节省约一半耗时。}。拒绝接受这些麻烦的同学可以尝试本节介绍的在线编译方法。
+% 相信您在接触了本地编译以后，很快就会意识到一些十分显然的事实，譬如 \TeX 编译器
+% 安装过程较为漫长\footnote{因此对于 Windows 推荐 \MiKTeX。}，占用空间过大
+% \footnote{事实上，可以通过 |scheme-infraonly| 模式安装 \TL，随后利用 \pkg{tlmgr}
+% 安装依赖宏包，这份宏包列表可以在 Git 仓库的 \file{.github/workflows/build.yml}
+% 找到。}，而且在一部分处理器性能不佳的电脑上需要较长编译时间\footnote{出于文件 IO
+% 速度的差异，同一个模板在 Linux 编译可以相对 Windows 节省约一半耗时。}。
+% 拒绝接受这些麻烦的同学可以尝试本节介绍的在线编译方法。
 %
 % {\color{red}|[!]|} 请注意，在线编辑器不一定提供良好的文件恢复和版本管理机制。
 % 请谨慎备份您的心血结晶。
@@ -843,16 +866,26 @@ To produce the documentation run the original source files ending with
 % \subsubsection{南大 \TeX 平台简介}
 % \changes{v0.2}{2021/09/07}{添加对南大 \TeX 的支持。}
 %
-% \href{https://tex.nju.edu.cn}{南大 \TeX} 基于开源的 Overleaf 社区版平台构建\footnote{理论上在\href{https://doc.nju.edu.cn/books/latex}{这个网站}能找到一段平台简介，实际上大家都有意无意地鸽了，下次一定补上。}，于2021年3月4日正式上线，是 \href{https://sci.nju.edu.cn/}{eScience 中心}为南大在校师生提供的 \LaTeX 在线编辑器，首次使用需凭学校邮箱自助注册账号。
+% \href{https://tex.nju.edu.cn}{南大 \TeX} 基于开源的 Overleaf 社区版平台构建
+% \footnote{理论上在\href{https://doc.nju.edu.cn/books/latex}{这个网站}能找到
+% 一段平台简介，实际上大家都有意无意地鸽了，下次一定补上。}，于2021年3月4日正
+% 式上线，是 \href{https://sci.nju.edu.cn/}{eScience 中心}为南大在校师生提供的
+% \LaTeX 在线编辑器，首次使用需凭学校邮箱自助注册账号。
 %
-% {\color{red}|[!]|} 在 2022 年 5 月的运行中，该网站出现了多次崩溃事件，初步判断原因是由社区版并没有为高并发数做优化引发的。高峰时期，仍然建议在本地部署 \TeX 发行版。
+% {\color{red}|[!]|} 在 2022 年 5 月的运行中，该网站出现了多次崩溃事件，
+% 初步判断原因是由社区版并没有为高并发数做优化引发的。
+% 高峰时期，仍然建议在本地部署 \TeX 发行版。
 %
 % \subsubsection{操作步骤}
 %
-% 本说明手册开头的 \ref{subsec:first-things-first} 即呈现了网站内嵌的 \cls{njuthesis} 模板的使用方法。由于南大 \TeX 网站已预装 \cls{njuthesis}，可以直接编写正文，无需 \file{.cls} 等格式文件。如果有其他要求，也可以按如下步骤手动上传包含模板的压缩包。
+% 本说明手册开头的 \ref{subsec:first-things-first} 即呈现了网站内嵌的
+% \cls{njuthesis} 模板的使用方法。由于南大 \TeX 网站已预装 \cls{njuthesis}，
+% 可以直接编写正文，无需 \file{.cls} 等格式文件。
+% 如果有其他要求，也可以按如下步骤手动上传包含模板的压缩包。
 %
 % \begin{enumerate}
-%   \item 访问\href{https://tex.nju.edu.cn}{南大 \TeX 网站}，点击界面右上方“注册”按钮，使用\emph{南京大学邮箱}注册账号并登录
+%   \item 访问\href{https://tex.nju.edu.cn}{南大 \TeX 网站}，
+%         点击界面右上方“注册”按钮，使用\emph{南京大学邮箱}注册账号并登录
 %   \item 新建空白项目，或者上传 \ref{subsubsec:on-the-fly-installation} 节得到的压缩文件。
 %   \item 在项目页面左上角的“菜单”中，确认编译器为 |XeLaTeX| 或者 |LuaLaTeX|
 %   \item 仿照 \file{njuthesis-sample.tex} 编写论文
@@ -1229,7 +1262,8 @@ To produce the documentation run the original source files ending with
 %
 % \paragraph{授权}
 %
-% 本节提及的字库中，中文字库只有方正书宋、方正黑体、方正楷体、方正仿宋、两种思源字体和四种Fandol字体能够\emph{免费商用}；
+% 本节提及的字库中，中文字库只有方正书宋、方正黑体、方正楷体、方正仿宋、
+% 两种思源字体和四种Fandol字体能够\emph{免费商用}；
 % 英文字库中只有 Times New Roman、XITS 和三种 \TeX Gyre字体能够\emph{免费商用}。
 % 因此，若需要将本模板用于商业相关的活动，请咨询专业人士。
 %
@@ -1776,7 +1810,7 @@ To produce the documentation run the original source files ending with
 %   \begin{syntax}
 %     qed-symbol = \meta{证毕符号}
 %   \end{syntax}
-% 证毕符号。等效于 \cs{theoremsymbol}\marg{符号}。默认为空心方块（\mdwhtsquare）。
+% 证毕符号。等效于 \cs{theoremsymbol}\marg{符号}。默认为空心方块（\mdlgwhtsquare）。
 % 禁用 \pkg{unicode-math} 时为实心黑色方块（\rule{1ex}{1ex}）。
 % \end{function}
 %
@@ -1789,13 +1823,13 @@ To produce the documentation run the original source files ending with
 %
 % 模板的默认设置等效于
 %
-% \begin{latexexample}[moretexcs={\njusetup,\bfseries,\itshape,\mdwhtsquare},
+% \begin{latexexample}[moretexcs={\njusetup,\bfseries,\itshape,\mdlgwhtsquare},
 %   emph={[2]theorem}]
 %   \njusetup[theorem]{
 %       style       = plain,
 %       header-font = \normalfont \bfseries ,
 %       body-font   = \itshape ,
-%       qed-symbol  = \ensuremath { \mdwhtsquare },
+%       qed-symbol  = \ensuremath { \mdlgwhtsquare },
 %       counter     = chapter
 %   }
 % \end{latexexample}
@@ -2677,7 +2711,7 @@ To produce the documentation run the original source files ending with
 % 用于生成 \file{njuthesis-graduate.def}；博士后模板配置对应\pgrd{p}，
 % 用于生成 \file{njuthesis-postdoctoral.def}。
 %
-% 另有若干包含 |@@| 的 guard，用以表示名空间（模块）。
+% 另有若干包含 \textsf{@@} 的 guard，用以表示名空间（模块）。
 % 在删除注释生成格式文件时，源代码变量名称中的 |@@| 会被等号后的字段替换，
 % 譬如在本模板主体部分中\grd{@@=nju}。
 %
@@ -2925,7 +2959,7 @@ To produce the documentation run the original source files ending with
 %
 % \begin{macro}{\@@_vskip:N}
 % 类似于 \LaTeXe 中的 \tn{vspace*}
-% \url{https://tex.stackexchange.com/a/30065/251992}，
+% \footnote{\url{https://tex.stackexchange.com/a/30065/251992}}，
 % 从上一个页面元素底部开始生成 |skip|。
 %    \begin{macrocode}
 \cs_set_protected:Npn \@@_vskip:N #1
@@ -3157,7 +3191,8 @@ To produce the documentation run the original source files ending with
 %   \item 宽度，|dim| 型变量
 %   \item 文本
 % \end{arguments}
-% 先使用 \cs{@@_get_text_width:Nn} 获取文本内容宽度，该宽度存储在调用的 |dim| 型变量中。随后输出文本内容。
+% 先使用 \cs{@@_get_text_width:Nn} 获取文本内容宽度，
+% 该宽度存储在调用的 |dim| 型变量中。随后输出文本内容。
 %    \begin{macrocode}
 \cs_new_protected:Npn \@@_full_uline:Nn #1#2
   {
@@ -4293,11 +4328,8 @@ To produce the documentation run the original source files ending with
   }
 \cs_new_protected:Npn \@@_check_pkg_conflict:nn #1#2
   {
-    \ctex_at_end_package:nn { #1 }
-      {
-        \ctex_at_begin_package:nn { #2 }
-          { \msg_error:nnnn { njuthesis } { package-conflict } {#1} {#2} }
-      }
+    \ctex_at_begin_package:nn { #2 }
+      { \msg_warning:nnnn { njuthesis } { package-conflict } {#1} {#2} }
   }
 %    \end{macrocode}
 % \end{macro}
@@ -7520,7 +7552,9 @@ To produce the documentation run the original source files ending with
 % \begin{arguments}
 %   \item 分隔符
 % \end{arguments}
-% 研究生中文摘要页包括下划线以及若干特殊的对齐方式，实现方式较为繁琐。使用 \cs{@@_full_uline:NV} 确定内容宽度后，调用 \cs{@@_uline:n} 或 \cs{@@_ulined_center_box:nn} 命令以绘制横穿页面的下划线。前两行为标题。
+% 研究生中文摘要页包括下划线以及若干特殊的对齐方式，实现方式较为繁琐。
+% 使用 \cs{@@_full_uline:NV} 确定内容宽度后，调用 \cs{@@_uline:n} 或
+% \cs{@@_ulined_center_box:nn} 命令以绘制横穿页面的下划线。前两行为标题。
 %    \begin{macrocode}
 \cs_new_protected:Npn \@@_abs_info_g:N #1
   {
