@@ -10,7 +10,7 @@ on:
 
 env:
   CTAN_URL: https://mirrors.rit.edu/CTAN
-  TL_PACKAGES: alphalph auxhook background bibtex bigfoot booktabs caption cm-unicode colortbl csquotes ctex dashundergaps diagbox enumitem everypage fancyhdr fancyvrb fandol footmisc hologo hycolor hypdoc hyperref l3build latexmk libertinus-fonts listings lm-math makecell makeindex natbib ninecolors njuvisual pict2e preview psnfss setspace siunitx symbol tabularray tex-gyre tex-gyre-math threeparttable translator underscore unicode-math url xits xstring zref
+  TL_PACKAGES: alphalph auxhook background bibtex bigfoot booktabs caption cm-unicode colortbl csquotes ctex dashundergaps diagbox enumitem everypage fancyhdr fancyvrb fandol footmisc hologo hycolor hypdoc hyperref l3build latexmk libertinus-fonts listings lm-math makecell makeindex natbib ninecolors njuvisual pict2e preview psnfss setspace siunitx symbol tabularray tex-gyre tex-gyre-math threeparttable translator underscore unicode-math url xits xstring zhlineskip zref
 
 jobs:
   release:
@@ -41,11 +41,11 @@ jobs:
           wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SimplifiedChinese/SourceHanSerifSC-SemiBold.otf
           wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SimplifiedChinese/SourceHanSerifSC-Bold.otf
           wget https://github.com/adobe-fonts/source-han-serif/raw/release/OTF/SimplifiedChinese/SourceHanSerifSC-Heavy.otf
-          wget https://github.com/atxy-blip/njuthesis-doc-fonts/raw/main/iosevka-light.ttf
-          wget https://github.com/atxy-blip/njuthesis-doc-fonts/raw/main/iosevka-lightitalic.ttf
-          wget https://github.com/atxy-blip/njuthesis-doc-fonts/raw/main/iosevka-semibold.ttf
-          cp *.otf /usr/share/fonts/
-          cp *.ttf /usr/share/fonts/
+          wget https://github.com/be5invis/Iosevka/releases/download/v15.6.3/ttf-iosevka-15.6.3.zip
+          cp *.otf                   /usr/share/fonts/
+          cp iosevka-lightitalic.ttf /usr/share/fonts/
+          cp iosevka-light.ttf       /usr/share/fonts/
+          cp iosevka-semibold.ttf    /usr/share/fonts/
           chmod -x /usr/share/fonts/*.otf
           chmod -x /usr/share/fonts/*.ttf
           fc-cache -fv
