@@ -106,21 +106,33 @@ class TLDepend:
         depend: set[str] = set(['latexmk'])
         for fp in file_paths:
             for f in os.listdir(fp):
-                depend.update(self._get_depend_from_file(f))
+                print(fp,f)
+                full_path = os.path.join(fp,f)
+                if not os.path.isdir(full_path):
+                    depend.update(self._get_depend_from_file(full_path))
         depend.discard("njuthesis")
         self.njuthesis_depend = depend
 
     def update_njuthesis_depend(self):
+        init_depend = self.njuthesis_depend.copy()
+        full_depend: set[str] = set()
         with open(TL_DEPEND_PATH, mode="r", encoding='utf-8') as f:
             data = json.load(f)
-        for entry in data:
-            if entry["name"] in self.njuthesis_depend:
-                self.njuthesis_depend.update(entry["depend"])
-        self.njuthesis_depend = sorted(self.njuthesis_depend)
+        while len(init_depend) > 0:
+            # recursive method
+            pkg = init_depend.pop()
+            full_depend.update([pkg])
+            for entry in data:
+                if entry["name"] == pkg:
+                    temp = set(entry["depend"])
+                    common = full_depend.intersection(temp)
+                    init_depend.update(temp.difference(common))
+            print(pkg, len(init_depend),len(full_depend))
+        self.njuthesis_depend = sorted(full_depend)
 
     def _get_depend_from_file(self, file: str):
         depend: set[str] = set()
-        parser = Parser(os.path.join(L3BUILD_UNPACKED_PATH, file))
+        parser = Parser(file)
         parser.parse()
         for d in parser.depend:
             try:
@@ -136,6 +148,7 @@ def main():
     analyzer.get_file_mappings()
     analyzer.get_njuthesis_depend([L3BUILD_UNPACKED_PATH, TEST_PATH])
     analyzer.update_njuthesis_depend()
+    print(analyzer.njuthesis_depend)
     os.system('tlmgr install ' + ' '.join(analyzer.njuthesis_depend))
 
 

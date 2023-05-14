@@ -33,6 +33,7 @@ jobs:
       - name: Install latest njuthesis
         run: |
           ${{ env.SET_PATH }}
+          tlmgr option repository ${{ env.CTAN_URL }}/systems/texlive/tlnet/
           tlmgr install xetex l3build
           l3build install
           cd scripts
@@ -40,8 +41,8 @@ jobs:
           cd data
           wget https://raw.githubusercontent.com/stone-zeng/tl-depend-analysis/data/data/tl-depend.json
           cd ..
-          python3 main.py
-          tlmgr update --self --all --no-auto-install --repository=${{ env.CTAN_URL }}/systems/texlive/tlnet/
+          python3 main.py > /dev/null
+          tlmgr update --self --all --no-auto-install
 
       - name: Compile test file
         run: |
