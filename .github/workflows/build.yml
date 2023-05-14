@@ -31,7 +31,7 @@ jobs:
           cd install-tl-20* && ./install-tl --profile ../.github/workflows/texlive.profile
           ls
           cd ../scripts
-          bash download.sh
+          bash download.sh ${{ env.CTAN_URL }}
           python main.py
           tlmgr update --self --all --no-auto-install --repository=${{ env.CTAN_URL }}/systems/texlive/tlnet/
 
