@@ -35,10 +35,11 @@ jobs:
           ${{ env.SET_PATH }}
           tlmgr install xetex l3build
           l3build install
-          pwd
           cd scripts
           bash download.sh ${{ env.CTAN_URL }}
           curl -o data/tl-depend.json https://github.com/stone-zeng/tl-depend-analysis/blob/data/data/tl-depend.json
+          ls
+          ls data
           python main.py
           tlmgr update --self --all --no-auto-install --repository=${{ env.CTAN_URL }}/systems/texlive/tlnet/
 
