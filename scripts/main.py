@@ -107,7 +107,7 @@ class TLDepend:
         self.njuthesis_depend = depend
 
     def update_njuthesis_depend(self):
-        with open(TL_DEPEND_PATH, mode="r") as f:
+        with open(TL_DEPEND_PATH, mode="r", encoding='utf-8') as f:
             print(type(f),f.readlines()[:6])
             data = json.load(f)
         for entry in data:
