@@ -108,6 +108,7 @@ class TLDepend:
 
     def update_njuthesis_depend(self):
         with open(TL_DEPEND_PATH, mode="r") as f:
+            print(type(f),f.readlines()[:6])
             data = json.load(f)
         for entry in data:
             if entry["name"] in self.njuthesis_depend:

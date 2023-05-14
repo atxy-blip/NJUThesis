@@ -40,7 +40,9 @@ jobs:
           cd data
           wget https://github.com/stone-zeng/tl-depend-analysis/blob/data/data/tl-depend.json
           cd ..
-          python main.py
+          pwd
+          ls data
+          python3 main.py
           tlmgr update --self --all --no-auto-install --repository=${{ env.CTAN_URL }}/systems/texlive/tlnet/
 
       - name: Compile test file
