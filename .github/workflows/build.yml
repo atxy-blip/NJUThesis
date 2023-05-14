@@ -29,7 +29,8 @@ jobs:
           wget ${{ env.CTAN_URL }}/systems/texlive/tlnet/install-tl-unx.tar.gz
           tar -xzf install-tl-unx.tar.gz
           cd install-tl-20* && ./install-tl --profile ../.github/workflows/texlive.profile
-          cd scripts
+          ls
+          cd ../scripts
           bash download.sh
           python main.py
           tlmgr update --self --all --no-auto-install --repository=${{ env.CTAN_URL }}/systems/texlive/tlnet/
