@@ -8,8 +8,8 @@ from typing import Any
 from file_parser import Parser
 
 
-TLPDB_PATH = 'data/texlive.tlpdb'
-TL_DEPEND_PATH = 'data/tl-depend.json'
+TLPDB_PATH            = 'data/texlive.tlpdb'
+TL_DEPEND_PATH        = 'data/tl-depend.json'
 L3BUILD_UNPACKED_PATH = "../build/unpacked"
 
 TEXMFDIST_PATH = subprocess.run(
@@ -107,6 +107,7 @@ class TLDepend:
         self.njuthesis_depend = depend
 
     def update_njuthesis_depend(self):
+        print(os.path.exists(TL_DEPEND_PATH))
         with open(TL_DEPEND_PATH, mode="r") as f:
             data = json.load(f)
 

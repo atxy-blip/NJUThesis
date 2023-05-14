@@ -40,6 +40,7 @@ jobs:
           curl -o data/tl-depend.json https://github.com/stone-zeng/tl-depend-analysis/blob/data/data/tl-depend.json
           ls
           ls data
+          pwd
           python main.py
           tlmgr update --self --all --no-auto-install --repository=${{ env.CTAN_URL }}/systems/texlive/tlnet/
 
