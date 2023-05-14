@@ -107,14 +107,11 @@ class TLDepend:
         self.njuthesis_depend = depend
 
     def update_njuthesis_depend(self):
-        print(os.path.exists(TL_DEPEND_PATH))
         with open(TL_DEPEND_PATH, mode="r") as f:
             data = json.load(f)
-
         for entry in data:
             if entry["name"] in self.njuthesis_depend:
                 self.njuthesis_depend.update(entry["depend"])
-
         self.njuthesis_depend = sorted(self.njuthesis_depend)
 
 
