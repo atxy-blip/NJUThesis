@@ -38,10 +38,10 @@ jobs:
           cd scripts
           bash download.sh ${{ env.CTAN_URL }}
           cd data
-          wget https://github.com/stone-zeng/tl-depend-analysis/blob/data/data/tl-depend.json
+          wget https://raw.githubusercontent.com/stone-zeng/tl-depend-analysis/data/data/tl-depend.json
           cd ..
           pwd
-          ls data
+          ls -l data
           python3 main.py
           tlmgr update --self --all --no-auto-install --repository=${{ env.CTAN_URL }}/systems/texlive/tlnet/
 
