@@ -33,7 +33,7 @@ jobs:
       - name: Install latest njuthesis
         run: |
           ${{ env.SET_PATH }}
-          tlmgr install l3build
+          tlmgr install xetex l3build
           l3build install
           pwd
           cd scripts
