@@ -15,6 +15,9 @@ TL_DEPEND_PATH        = 'data/tl-depend.json'
 L3BUILD_UNPACKED_PATH = "../build/unpacked"
 TEST_PATH             = "../test"
 
+INIT_PACKAGES = set(['latexmk', 'biblatex', 'cleveref', 'enumitem',
+                     'footmisc', 'ntheorem', 'unicode-math'])
+
 TEXMFDIST_PATH = subprocess.run(
     ['kpsewhich', '-var-value', 'TEXMFDIST'],
     capture_output=True, check=True).stdout.decode().strip()
@@ -103,7 +106,7 @@ class TLDepend:
                         self.file_mappings[name] = package.name
 
     def get_njuthesis_depend(self, file_paths: list):
-        depend: set[str] = set(['latexmk'])
+        depend: set[str] = INIT_PACKAGES
         for fp in file_paths:
             for f in os.listdir(fp):
                 print(fp,f)

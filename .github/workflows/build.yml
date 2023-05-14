@@ -41,7 +41,7 @@ jobs:
           cd data
           wget https://raw.githubusercontent.com/stone-zeng/tl-depend-analysis/data/data/tl-depend.json
           cd ..
-          python3 main.py > /dev/null
+          python3 main.py
           tlmgr update --self --all --no-auto-install
 
       - name: Compile test file
