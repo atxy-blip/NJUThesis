@@ -1,3 +1,5 @@
+# https://github.com/stone-zeng/tl-depend-analysis/
+
 if [ -z "$1" ]; then
     MIRROR=https://mirror.ctan.org
 else

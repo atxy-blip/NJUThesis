@@ -1,3 +1,5 @@
+# https://github.com/stone-zeng/tl-depend-analysis/
+
 import dataclasses
 import json
 import os
@@ -11,6 +13,7 @@ from file_parser import Parser
 TLPDB_PATH            = 'data/texlive.tlpdb'
 TL_DEPEND_PATH        = 'data/tl-depend.json'
 L3BUILD_UNPACKED_PATH = "../build/unpacked"
+TEST_PATH             = "../test"
 
 TEXMFDIST_PATH = subprocess.run(
     ['kpsewhich', '-var-value', 'TEXMFDIST'],
@@ -99,10 +102,11 @@ class TLDepend:
                     else:
                         self.file_mappings[name] = package.name
 
-    def get_njuthesis_depend(self):
-        depend: set[str] = set()
-        for file in os.listdir(L3BUILD_UNPACKED_PATH):
-            depend.update(self._get_depend_from_file(file))
+    def get_njuthesis_depend(self, file_paths: list):
+        depend: set[str] = set(['latexmk'])
+        for fp in file_paths:
+            for f in os.listdir(fp):
+                depend.update(self._get_depend_from_file(f))
         depend.discard("njuthesis")
         self.njuthesis_depend = depend
 
@@ -113,7 +117,6 @@ class TLDepend:
             if entry["name"] in self.njuthesis_depend:
                 self.njuthesis_depend.update(entry["depend"])
         self.njuthesis_depend = sorted(self.njuthesis_depend)
-
 
     def _get_depend_from_file(self, file: str):
         depend: set[str] = set()
@@ -131,9 +134,10 @@ def main():
     analyzer = TLDepend()
     analyzer.parse_tlpdb()
     analyzer.get_file_mappings()
-    analyzer.get_njuthesis_depend()
+    analyzer.get_njuthesis_depend([L3BUILD_UNPACKED_PATH, TEST_PATH])
     analyzer.update_njuthesis_depend()
     os.system('tlmgr install ' + ' '.join(analyzer.njuthesis_depend))
+
 
 if __name__ == '__main__':
     main()
