@@ -15,8 +15,8 @@ TL_DEPEND_PATH        = 'data/tl-depend.json'
 L3BUILD_UNPACKED_PATH = "../build/unpacked"
 TEST_PATH             = "../test"
 
-INIT_PACKAGES = set(['latexmk', 'biblatex', 'cleveref', 'enumitem',
-                     'footmisc', 'ntheorem', 'unicode-math'])
+INIT_PACKAGES = set(['latexmk', 'biblatex', 'cleveref', 'enumitem', 'footmisc',
+                     'ntheorem', 'unicode-math', 'tex-gyre', 'xits', 'lexend'])
 
 TEXMFDIST_PATH = subprocess.run(
     ['kpsewhich', '-var-value', 'TEXMFDIST'],
