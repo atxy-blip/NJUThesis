@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 import sys
+from argparse import ArgumentParser
 from typing import Any
 
 from file_parser import Parser
@@ -15,9 +16,14 @@ TL_DEPEND_PATH        = 'data/tl-depend.json'
 L3BUILD_UNPACKED_PATH = "../build/unpacked"
 TEST_PATH             = "../test"
 
-INIT_PACKAGES = set(['latexmk', 'biblatex', 'cleveref', 'enumitem', 'footmisc',
-                     'ntheorem', 'unicode-math', 'tex-gyre', 'tex-gyre-math', 'xits',
-                     'lexend', 'cm-unicode', 'biblatex-gb7714-2015', 'biber'])
+# INIT_PACKAGES = set(['latexmk', 'biblatex', 'cleveref', 'enumitem', 'footmisc', 'ntheorem',
+#                      'unicode-math', 'tex-gyre', 'tex-gyre-math', 'xits', 'lexend', 'cm-unicode',
+#                      'biblatex-gb7714-2015', 'biber', 'bibtex', 'makeindex'])
+
+arg_parser = ArgumentParser(description='Optional packages')
+arg_parser.add_argument('--pkg', type=str, default='')
+
+INIT_PACKAGES = set(arg_parser.parse_args().pkg.split())
 
 TEXMFDIST_PATH = subprocess.run(
     ['kpsewhich', '-var-value', 'TEXMFDIST'],
@@ -91,10 +97,11 @@ class TLDepend:
                         runfiles_flag = False
         return package
 
-    def get_file_mappings(self):
+    def get_file_mappings(self, verbose: bool = False):
         for package in self.packages:
             if package.name.endswith('-dev'):
-                print('Skip dev package:', package.name, file=sys.stderr)
+                if verbose:
+                    print('Skip dev package:', package.name, file=sys.stderr)
                 continue
             for file in package.runfiles:
                 if file.startswith('RELOC') or file.startswith('texmf-dist'):
@@ -102,7 +109,8 @@ class TLDepend:
                     # if path.startswith('fonts'):
                     #     continue
                     if (name := os.path.basename(path)) in self.file_mappings:
-                        print('Duplicate file:', file, file=sys.stderr)
+                        if verbose:
+                            print('Duplicate file:', file, file=sys.stderr)
                     else:
                         self.file_mappings[name] = package.name
 
