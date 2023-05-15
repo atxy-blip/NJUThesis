@@ -16,7 +16,8 @@ L3BUILD_UNPACKED_PATH = "../build/unpacked"
 TEST_PATH             = "../test"
 
 INIT_PACKAGES = set(['latexmk', 'biblatex', 'cleveref', 'enumitem', 'footmisc',
-                     'ntheorem', 'unicode-math', 'tex-gyre', 'xits', 'lexend'])
+                     'ntheorem', 'unicode-math', 'tex-gyre', 'xits', 'lexend',
+                     'biblatex-gb7714-2015'])
 
 TEXMFDIST_PATH = subprocess.run(
     ['kpsewhich', '-var-value', 'TEXMFDIST'],
