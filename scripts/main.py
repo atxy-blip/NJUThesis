@@ -17,7 +17,7 @@ TEST_PATH             = "../test"
 
 INIT_PACKAGES = set(['latexmk', 'biblatex', 'cleveref', 'enumitem', 'footmisc',
                      'ntheorem', 'unicode-math', 'tex-gyre', 'xits', 'lexend',
-                     'biblatex-gb7714-2015', 'biber'])
+                     'cm-unicode', 'biblatex-gb7714-2015', 'biber'])
 
 TEXMFDIST_PATH = subprocess.run(
     ['kpsewhich', '-var-value', 'TEXMFDIST'],
