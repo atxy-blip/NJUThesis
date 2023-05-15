@@ -17,7 +17,7 @@ TEST_PATH             = "../test"
 
 INIT_PACKAGES = set(['latexmk', 'biblatex', 'cleveref', 'enumitem', 'footmisc',
                      'ntheorem', 'unicode-math', 'tex-gyre', 'xits', 'lexend',
-                     'biblatex-gb7714-2015'])
+                     'biblatex-gb7714-2015', 'biber'])
 
 TEXMFDIST_PATH = subprocess.run(
     ['kpsewhich', '-var-value', 'TEXMFDIST'],
@@ -110,8 +110,8 @@ class TLDepend:
         depend: set[str] = INIT_PACKAGES
         for fp in file_paths:
             for f in os.listdir(fp):
-                print(fp,f)
-                full_path = os.path.join(fp,f)
+                print(fp, f)
+                full_path = os.path.join(fp, f)
                 if not os.path.isdir(full_path):
                     depend.update(self._get_depend_from_file(full_path))
         depend.discard("njuthesis")
