@@ -10,7 +10,7 @@ on:
 
 env:
   CTAN_URL: https://mirrors.rit.edu/CTAN
-  PACKAGES: unicode-math tex-gyre tex-gyre-math lexend xits natbib makeindex
+  PACKAGES: tex-gyre tex-gyre-math lexend xits natbib makeindex
 
 jobs:
   release:
@@ -44,7 +44,7 @@ jobs:
           cd data
           wget https://raw.githubusercontent.com/stone-zeng/tl-depend-analysis/data/data/tl-depend.json
           cd ..
-          python3 main.py
+          python3 main.py --pkg "${{ env.PACKAGES }}" --exclude "njuthesis.cls"
           tlmgr update --self --all --no-auto-install
 
       - name: Install fonts

@@ -11,7 +11,7 @@ on:
 
 env:
   CTAN_URL: https://mirrors.rit.edu/CTAN
-  PACKAGES: latexmk biblatex cleveref enumitem footmisc ntheorem unicode-math tex-gyre xits biblatex-gb7714-2015 biber
+  PACKAGES: latexmk biblatex cleveref enumitem footmisc ntheorem tex-gyre xits biblatex-gb7714-2015 biber
 
 jobs:
   build-on-ubuntu:
@@ -42,7 +42,7 @@ jobs:
           cd data
           wget https://raw.githubusercontent.com/stone-zeng/tl-depend-analysis/data/data/tl-depend.json
           cd ..
-          python3 main.py --pkg "${{ env.PACKAGES }}"
+          python3 main.py --pkg "${{ env.PACKAGES }}" --exclude "njuthesis-doc.cls"
           tlmgr update --self --all --no-auto-install
 
       - name: Compile test file

@@ -22,8 +22,11 @@ TEST_PATH             = "../test"
 
 arg_parser = ArgumentParser(description='Optional packages')
 arg_parser.add_argument('--pkg', type=str, default='')
+arg_parser.add_argument('--exclude', type=str, default='')
+args = arg_parser.parse_args()
 
-INIT_PACKAGES = set(arg_parser.parse_args().pkg.split())
+INIT_PACKAGES = set(args.pkg.split())
+EXCLUDE_FILE = set(args.exclude.split())
 
 TEXMFDIST_PATH = subprocess.run(
     ['kpsewhich', '-var-value', 'TEXMFDIST'],
@@ -118,9 +121,9 @@ class TLDepend:
         depend: set[str] = INIT_PACKAGES
         for fp in file_paths:
             for f in os.listdir(fp):
-                print(fp, f)
                 full_path = os.path.join(fp, f)
-                if not os.path.isdir(full_path):
+                if not f in EXCLUDE_FILE and not os.path.isdir(full_path):
+                    print('File processed', full_path)
                     depend.update(self._get_depend_from_file(full_path))
         depend.discard("njuthesis")
         self.njuthesis_depend = depend
@@ -139,7 +142,7 @@ class TLDepend:
                     temp = set(entry["depend"])
                     common = full_depend.intersection(temp)
                     init_depend.update(temp.difference(common))
-            print(pkg, len(init_depend),len(full_depend))
+            print(len(full_depend), len(init_depend), pkg)
         self.njuthesis_depend = sorted(full_depend)
 
     def _get_depend_from_file(self, file: str):
