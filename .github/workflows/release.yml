@@ -10,7 +10,7 @@ on:
 
 env:
   CTAN_URL: https://mirrors.rit.edu/CTAN
-  PACKAGES: tex-gyre tex-gyre-math lexend xits natbib makeindex
+  PACKAGES: cm-unicode tex-gyre tex-gyre-math lexend xits natbib makeindex
 
 jobs:
   release:

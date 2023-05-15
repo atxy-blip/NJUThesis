@@ -5,20 +5,17 @@ import json
 import os
 import subprocess
 import sys
-from argparse import ArgumentParser
 from typing import Any
+from argparse import ArgumentParser
 
 from file_parser import Parser
 
+MODULE_NAME = 'njuthesis'
 
 TLPDB_PATH            = 'data/texlive.tlpdb'
 TL_DEPEND_PATH        = 'data/tl-depend.json'
 L3BUILD_UNPACKED_PATH = "../build/unpacked"
 TEST_PATH             = "../test"
-
-# INIT_PACKAGES = set(['latexmk', 'biblatex', 'cleveref', 'enumitem', 'footmisc', 'ntheorem',
-#                      'unicode-math', 'tex-gyre', 'tex-gyre-math', 'xits', 'lexend', 'cm-unicode',
-#                      'biblatex-gb7714-2015', 'biber', 'bibtex', 'makeindex'])
 
 arg_parser = ArgumentParser(description='Optional packages')
 arg_parser.add_argument('--pkg', type=str, default='')
@@ -26,7 +23,7 @@ arg_parser.add_argument('--exclude', type=str, default='')
 args = arg_parser.parse_args()
 
 INIT_PACKAGES = set(args.pkg.split())
-EXCLUDE_FILE = set(args.exclude.split())
+EXCLUDE_FILE  = set(args.exclude.split())
 
 TEXMFDIST_PATH = subprocess.run(
     ['kpsewhich', '-var-value', 'TEXMFDIST'],
@@ -117,18 +114,18 @@ class TLDepend:
                     else:
                         self.file_mappings[name] = package.name
 
-    def get_njuthesis_depend(self, file_paths: list):
+    def get_module_depend(self, file_paths: list):
         depend: set[str] = INIT_PACKAGES
         for fp in file_paths:
             for f in os.listdir(fp):
                 full_path = os.path.join(fp, f)
                 if not f in EXCLUDE_FILE and not os.path.isdir(full_path):
-                    print('File processed', full_path)
+                    print('-----\nProcess file', full_path)
                     depend.update(self._get_depend_from_file(full_path))
-        depend.discard("njuthesis")
+        depend.discard(MODULE_NAME)
         self.njuthesis_depend = depend
 
-    def update_njuthesis_depend(self):
+    def update_module_depend(self):
         init_depend = self.njuthesis_depend.copy()
         full_depend: set[str] = set()
         with open(TL_DEPEND_PATH, mode="r", encoding='utf-8') as f:
@@ -154,6 +151,10 @@ class TLDepend:
                 depend.add(self.file_mappings[d])
             except KeyError:
                 print('Dependency not found:', d, file=sys.stderr)
+        if depend == set():
+            print('Find no package')
+        else:
+            print('Add packages', ' '.join(sorted(depend)))
         return depend
 
 
@@ -161,9 +162,9 @@ def main():
     analyzer = TLDepend()
     analyzer.parse_tlpdb()
     analyzer.get_file_mappings()
-    analyzer.get_njuthesis_depend([L3BUILD_UNPACKED_PATH, TEST_PATH])
-    analyzer.update_njuthesis_depend()
-    print(analyzer.njuthesis_depend)
+    analyzer.get_module_depend([L3BUILD_UNPACKED_PATH, TEST_PATH])
+    analyzer.update_module_depend()
+    # print(analyzer.njuthesis_depend)
     os.system('tlmgr install ' + ' '.join(analyzer.njuthesis_depend))
 
 

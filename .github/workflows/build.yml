@@ -11,7 +11,7 @@ on:
 
 env:
   CTAN_URL: https://mirrors.rit.edu/CTAN
-  PACKAGES: latexmk biblatex cleveref enumitem footmisc ntheorem tex-gyre xits biblatex-gb7714-2015 biber
+  PACKAGES: latexmk cleveref enumitem footmisc tex-gyre xits biblatex-gb7714-2015 biber
 
 jobs:
   build-on-ubuntu:
