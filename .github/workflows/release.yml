@@ -21,7 +21,7 @@ jobs:
         export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
     steps:
       - name: Set up Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set Version
         run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
@@ -92,3 +92,12 @@ jobs:
             njuthesis-v*.pdf
             njuthesis-user-v*.zip
             njuthesis-ctan-v*.zip
+
+      - name: Upload Test Results If Failed
+        uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: test-result
+          path: |
+            build/test
+            build/test-testfiles
